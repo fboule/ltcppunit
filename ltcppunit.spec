@@ -1,5 +1,5 @@
 Name:           ltcppunit
-Version:        0.1
+Version:        1.0
 Release:        1%{?dist}
 Summary:        Lightweight C++ Unit Testing
 
@@ -33,6 +33,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc
+/usr/include/ltcppunit/common.h
+/usr/include/ltcppunit/ltcppunit.h
+/usr/lib/libltcppunit-1.0.a
+/usr/lib/libltcppunit-1.0.la
+/usr/lib/libltcppunit-1.0.so
+/usr/lib/libltcppunit-1.0.so.0
+/usr/lib/libltcppunit-1.0.so.0.0.0
+
+
 
 
 %changelog
