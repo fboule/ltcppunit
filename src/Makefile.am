@@ -21,4 +21,6 @@
 
 lib_LTLIBRARIES = libltcppunit-1.0.la
 
-libltcppunit_1_0_la_SOURCES = unittest.cc
+libltcppunit_1_0_la_SOURCES = ltcppunit.cc
+
+include_HEADERS = ltcppunit.h
