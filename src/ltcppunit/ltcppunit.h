@@ -22,7 +22,7 @@
 
 #include <string>
 #include <vector>
-#include "common.h"
+#include <ltcppunit/common.h>
 
 using namespace std;
 

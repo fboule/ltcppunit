@@ -21,6 +21,6 @@
 
 lib_LTLIBRARIES = libltcppunit-1.0.la
 
-libltcppunit_1_0_la_SOURCES = ltcppunit.cc
+libltcppunit_1_0_la_SOURCES = ltcppunit/ltcppunit.cc
 
-include_HEADERS = ltcppunit.h
+nobase_include_HEADERS = ltcppunit/ltcppunit.h ltcppunit/common.h
