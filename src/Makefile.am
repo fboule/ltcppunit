@@ -19,6 +19,6 @@
 ##
 ###################################################################################
 
-lib_LTLIBRARIES = libltcppunit-0.1.la
+lib_LTLIBRARIES = libltcppunit-1.0.la
 
-libltcppunit_0_1_la_SOURCES = unittest.cc
+libltcppunit_1_0_la_SOURCES = unittest.cc
