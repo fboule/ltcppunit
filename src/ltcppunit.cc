@@ -20,7 +20,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "unittest.h"
+#include "ltcppunit.h"
 
 using namespace std;
 

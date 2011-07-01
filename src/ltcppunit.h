@@ -17,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with LTCPPUNIT.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef __TestSuite_H
-#define __TestSuite_H
+#ifndef __LTCPPUNIT_H
+#define __LTCPPUNIT_H
 
 #include <string>
 #include <vector>
