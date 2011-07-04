@@ -25,6 +25,7 @@
 using namespace std;
 
 vector<UnitTest::TestSuite*>* UnitTest::_tests = NULL;
+int UnitTest::_verbosity = 0;
 
 UnitTest::UnitTest()
 {
@@ -34,54 +35,67 @@ UnitTest::UnitTest()
     }
 }
 
-AssertError::AssertError(const string s, const string v1, const string v2, const int format)
+string UnitTest::dump(const string v1, const string v2)
 {
     ostringstream ost, ost2, ost3;
     int i;
 
+    if(max(v1.size(), v2.size()) == 0)
+        return string("");
+
+    ost << endl;
+
+    for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
+    {
+        if(i < v1.size())
+        {
+            ost.width(2);
+            ost.fill('0');
+            ost << (int) v1[i];
+            ost2 << (v1[i] > 31 ? v1[i] : '.');
+            if(i < v1.size() - 1)
+                ost << " ";
+        }
+        else
+        {
+            ost << "   ";
+            ost2 << '.';
+        }
+    }
+
+    ost << " : " << ost2.str() << '\n';
+
+    for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
+    {
+        if(i < v2.size())
+        {
+            ost.width(2);
+            ost.fill('0');
+            ost << (int) v2[i];
+            ost3 << (v2[i] > 31 ? v2[i] : '.');
+            if(i < v2.size() - 1)
+                ost << " ";
+        }
+        else
+        {
+            ost << "   ";
+            ost3 << '.';
+        }
+    }
+
+    ost << " : " << ost3.str();
+
+    return ost.str();
+}
+
+AssertError::AssertError(const string s, const string v1, const string v2, const int format)
+{
+    ostringstream ost;
+
     switch(format)
     {
     case FMT_DUMP:
-        ost << s << "\n" << hex;
-        for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
-        {
-            if(i < v1.size())
-            {
-                ost.width(2);
-                ost.fill('0');
-                ost << (int) v1[i];
-                ost2 << (v1[i] > 31 ? v1[i] : '.');
-                if(i < v1.size() - 1)
-                    ost << " ";
-            }
-            else
-            {
-                ost << "   ";
-                ost2 << '.';
-            }
-        }
-
-        ost << " : " << ost2.str() << '\n';
-
-        for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
-        {
-            if(i < v2.size())
-            {
-                ost.width(2);
-                ost.fill('0');
-                ost << (int) v2[i];
-                ost3 << (v2[i] > 31 ? v2[i] : '.');
-                if(i < v2.size() - 1)
-                    ost << " ";
-            }
-            else
-            {
-                ost << "   ";
-                ost3 << '.';
-            }
-        }
-
-        ost << " : " << ost3.str();
+        ost << s << UnitTest::dump(v1, v2);
         break;
     case FMT_DEFAULT:
     default:
@@ -101,6 +115,9 @@ AssertError::AssertError(const string s, const UINT8 v1, const UINT8 v2)
 
 int UnitTest::assert(const string s, const string v1, const string v2)
 {
+    if(UnitTest::_verbosity == 1)
+        cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+
     if(v1 == v2)
         return 0;
     else
@@ -109,6 +126,9 @@ int UnitTest::assert(const string s, const string v1, const string v2)
 
 int UnitTest::assert(const string s, const char* v1, const char* v2)
 {
+    if(UnitTest::_verbosity == 1)
+        cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+
     if(string(v1) == string(v2))
         return 0;
     else
@@ -117,6 +137,14 @@ int UnitTest::assert(const string s, const char* v1, const char* v2)
 
 int UnitTest::assert(const string s, const string v1, const string v2, const int format)
 {
+    if(UnitTest::_verbosity == 1)
+    {
+        if(format == FMT_DUMP)
+            cout << "Checking " << s << UnitTest::dump(v1, v2) << endl;
+        else
+            cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+    }
+
     if(v1 == v2)
         return 0;
     else
@@ -125,6 +153,14 @@ int UnitTest::assert(const string s, const string v1, const string v2, const int
 
 int UnitTest::assert(const string s, const char* v1, const char* v2, const int format)
 {
+    if(UnitTest::_verbosity == 1)
+    {
+        if(format == FMT_DUMP)
+            cout << "Checking " << s << UnitTest::dump(string(v1), string(v2)) << endl;
+        else
+            cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+    }
+
     if(string(v1) == string(v2))
         return 0;
     else
@@ -133,6 +169,9 @@ int UnitTest::assert(const string s, const char* v1, const char* v2, const int f
 
 int UnitTest::assert(const string s, const UINT8 v1, const UINT8 v2)
 {
+    if(UnitTest::_verbosity == 1)
+        cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+
     if(v1 == v2)
         return 0;
     else
@@ -160,11 +199,13 @@ int UnitTest::run()
             try {
                 if ((*item)->run() == 0)
                 {
-                    cout << ".";
-                }
+                    if(UnitTest::_verbosity == 0)
+                        cout << ".";
+                } 
             } 
             catch(AssertError e) {
-                cout << "F";
+                if(UnitTest::_verbosity == 0)
+                    cout << "F";
                 ost << "======================================================================" << endl;
                 ost << "FAIL: " << (*test)->_name << "::" << (*item)->_name << endl;
                 ost << "----------------------------------------------------------------------" << endl;
@@ -172,7 +213,8 @@ int UnitTest::run()
                 failed++;
             }
             catch(...) {
-                cout << "F";
+                if(UnitTest::_verbosity == 0)
+                    cout << "F";
                 ost << "======================================================================" << endl;
                 ost << "FAIL: " << (*test)->_name << "::" << (*item)->_name << endl;
                 ost << "----------------------------------------------------------------------" << endl;

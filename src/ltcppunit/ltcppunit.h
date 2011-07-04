@@ -68,7 +68,10 @@ private:
     static vector<TestSuite*>* _tests;
 
 public:
+    static int _verbosity;
+
     UnitTest();
+    static string dump(const string v1, const string v2);
     static int assert(const string, const UINT8, const UINT8);
     static int assert(const string, const string, const string);
     static int assert(const string, const string, const string, const int);
