@@ -43,8 +43,6 @@ string UnitTest::dump(const string v1, const string v2)
     if(max(v1.size(), v2.size()) == 0)
         return string("");
 
-    ost << endl;
-
     for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
     {
         if(i < v1.size())
@@ -83,7 +81,7 @@ string UnitTest::dump(const string v1, const string v2)
         }
     }
 
-    ost << " : " << ost3.str();
+    ost << " : " << ost3.str() << endl;
 
     return ost.str();
 }
@@ -95,11 +93,11 @@ AssertError::AssertError(const string s, const string v1, const string v2, const
     switch(format)
     {
     case FMT_DUMP:
-        ost << s << UnitTest::dump(v1, v2);
+        ost << s << endl << UnitTest::dump(v1, v2);
         break;
     case FMT_DEFAULT:
     default:
-        ost << s << " " << v1 << " != " << v2;
+        ost << s << " " << v1 << " != " << v2 << endl;
         break;
     }
         
@@ -116,66 +114,106 @@ AssertError::AssertError(const string s, const UINT8 v1, const UINT8 v2)
 int UnitTest::assert(const string s, const string v1, const string v2)
 {
     if(UnitTest::_verbosity == 1)
-        cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+        cout << "Checking " << s << " " << v1 << " == " << v2 << "... ";
 
     if(v1 == v2)
+    {
+        (UnitTest::_verbosity == 1) && cout << "ok" << endl;
         return 0;
+    }
     else
+    {
+        (UnitTest::_verbosity == 1) && cout << "no" << endl;
         throw AssertError(s, v1, v2, FMT_DEFAULT);
+    }
 }
 
 int UnitTest::assert(const string s, const char* v1, const char* v2)
 {
     if(UnitTest::_verbosity == 1)
-        cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+        cout << "Checking " << s << " " << v1 << " == " << v2 << "... ";
 
     if(string(v1) == string(v2))
+    {
+        (UnitTest::_verbosity == 1) && cout << "ok" << endl;
         return 0;
+    }
     else
+    {
+        (UnitTest::_verbosity == 1) && cout << "no" << endl;
         throw AssertError(s, string(v1), string(v2), FMT_DEFAULT);
+    }
 }
 
 int UnitTest::assert(const string s, const string v1, const string v2, const int format)
 {
+    string dmp;
+
     if(UnitTest::_verbosity == 1)
     {
         if(format == FMT_DUMP)
-            cout << "Checking " << s << UnitTest::dump(v1, v2) << endl;
+        {
+            cout << "Checking " << s << "... ";
+            dmp = UnitTest::dump(v1, v2);
+        }
         else
-            cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+            cout << "Checking " << s << " " << v1 << " == " << v2 << "... ";
     }
 
     if(v1 == v2)
+    {
+        (UnitTest::_verbosity == 1) && cout << "ok" << endl << dmp;
         return 0;
+    }
     else
+    {
+        (UnitTest::_verbosity == 1) && cout << "no" << endl << dmp;
         throw AssertError(s, v1, v2, format);
+    }
 }
 
 int UnitTest::assert(const string s, const char* v1, const char* v2, const int format)
 {
+    string dmp;
+
     if(UnitTest::_verbosity == 1)
     {
         if(format == FMT_DUMP)
-            cout << "Checking " << s << UnitTest::dump(string(v1), string(v2)) << endl;
+        {
+            cout << "Checking " << s << "... ";
+            dmp = UnitTest::dump(string(v1), string(v2));
+        }
         else
-            cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+            cout << "Checking " << s << " " << v1 << " == " << v2 << "... ";
     }
 
     if(string(v1) == string(v2))
+    {
+        (UnitTest::_verbosity == 1) && cout << "ok" << endl << dmp;
         return 0;
+    }
     else
+    {
+        (UnitTest::_verbosity == 1) && cout << "no" << endl << dmp;
         throw AssertError(s, string(v1), string(v2), format);
+    }
 }
 
 int UnitTest::assert(const string s, const UINT8 v1, const UINT8 v2)
 {
     if(UnitTest::_verbosity == 1)
-        cout << "Checking " << s << " " << v1 << " == " << v2 << endl;
+        cout << "Checking " << s << " " << v1 << " == " << v2 << "... ";
 
     if(v1 == v2)
+    {
+        (UnitTest::_verbosity == 1) && cout << "ok" << endl;
         return 0;
+    }
     else
+    {
+        (UnitTest::_verbosity == 1) && cout << "no" << endl;
         throw AssertError(s, v1, v2);
+    }
 }
 
 int UnitTest::run()
@@ -209,7 +247,7 @@ int UnitTest::run()
                 ost << "======================================================================" << endl;
                 ost << "FAIL: " << (*test)->_name << "::" << (*item)->_name << endl;
                 ost << "----------------------------------------------------------------------" << endl;
-                ost << "Assertion error: " << e._reason << endl;
+                ost << "Assertion error: " << e._reason;
                 failed++;
             }
             catch(...) {
