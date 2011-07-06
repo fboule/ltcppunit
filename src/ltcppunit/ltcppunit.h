@@ -24,17 +24,15 @@
 #include <vector>
 #include <ltcppunit/common.h>
 
-using namespace std;
-
 #define FMT_DEFAULT 0
 #define FMT_DUMP 1
 
 class AssertError
 {
 public:
-    string _reason;
-    AssertError(const string, const UINT8, const UINT8);
-    AssertError(const string, const string, const string, const int);
+    std::string _reason;
+    AssertError(const std::string, const UINT8, const UINT8);
+    AssertError(const std::string, const std::string, const std::string, const int);
 };
 
 class UnitTest
@@ -46,37 +44,37 @@ public:
     {
     public:
         TestCase(TestSuite&);
-        string _name;
+        std::string _name;
         virtual int run() = 0;
     };
 
     class TestSuite
     {
     private:
-        vector<TestCase*> _items;
+        std::vector<TestCase*> _items;
 
     public:
-        string _name;
+        std::string _name;
 
         TestSuite();
 
-        vector<TestCase*> getItems();
+        std::vector<TestCase*> getItems();
         TestSuite& addItem(TestCase*);
     };
 
 private:
-    static vector<TestSuite*>* _tests;
+    static std::vector<TestSuite*>* _tests;
 
 public:
     static int _verbosity;
 
     UnitTest();
-    static string dump(const string v1, const string v2);
-    static int assert(const string, const UINT8, const UINT8);
-    static int assert(const string, const string, const string);
-    static int assert(const string, const string, const string, const int);
-    static int assert(const string, const char*, const char*);
-    static int assert(const string, const char*, const char*, const int);
+    static std::string dump(const std::string v1, const std::string v2);
+    static int assert(const std::string, const UINT8, const UINT8);
+    static int assert(const std::string, const std::string, const std::string);
+    static int assert(const std::string, const std::string, const std::string, const int);
+    static int assert(const std::string, const char*, const char*);
+    static int assert(const std::string, const char*, const char*, const int);
     static int run();
 };
 
