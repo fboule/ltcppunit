@@ -81,7 +81,7 @@ string UnitTest::dump(const string v1, const string v2)
         }
     }
 
-    ost << " : " << ost3.str();
+    ost << " : " << ost3.str() << endl;
 
     return ost.str();
 }
