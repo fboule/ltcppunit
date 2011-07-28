@@ -70,12 +70,22 @@ public:
     static int _verbosity;
 
     UnitTest();
-    static std::string dump(const std::string v1, const std::string v2);
+
+    // Dump functions
+    static std::vector<std::string> array_dump(const std::vector<BYTE>);
+    static std::vector<std::string> array_dump(const std::vector<BYTE>, int);
+    static std::string dump(const std::string);
+    static std::string dump(const std::vector<BYTE>);
+    static std::string dump(const std::string, const std::string);
+    static std::string dump(const std::vector<BYTE>, const std::vector<BYTE>);
+
+    // Assert functions
     static int assert(const std::string, const UINT8, const UINT8);
     static int assert(const std::string, const std::string, const std::string);
     static int assert(const std::string, const std::string, const std::string, const int);
     static int assert(const std::string, const char*, const char*);
     static int assert(const std::string, const char*, const char*, const int);
+
     static int run();
 };
 

@@ -30,60 +30,118 @@ int UnitTest::_verbosity = 0;
 UnitTest::UnitTest()
 {
     if (UnitTest::_tests == NULL)
-    {
         UnitTest::_tests = new vector<UnitTest::TestSuite*>;
-    }
 }
 
-string UnitTest::dump(const string v1, const string v2)
+vector<string> UnitTest::array_dump(const vector<BYTE> v1)
 {
-    ostringstream ost, ost2, ost3;
-    int i;
+    return UnitTest::array_dump(v1, v1.size());
+}
 
-    if(max(v1.size(), v2.size()) == 0)
-        return string("");
+vector<string> UnitTest::array_dump(const vector<BYTE> v1, int size)
+{
+    vector<string> res;
+    string s;
+    ostringstream ost, ost2;
+    int width = 16;
+    int length;
 
-    for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
+    if(size == 0)
+        return res;
+
+    length = (size / width) * width;
+    length += (size > length ? 16 : 0);
+
+    for(int i = 0 ; i < length ; i++)
     {
+        if(i > 0 && (i % width) == 0)
+        {
+            if(i > v1.size() && i - v1.size() >= width)
+                res.push_back("");
+            else
+            {
+                s = ost.str() + ": " + ost2.str();
+                res.push_back(s);
+                ost.str("");
+                ost2.str("");
+            }
+        }
+
         if(i < v1.size())
         {
             ost.width(2);
             ost.fill('0');
-            ost << (int) v1[i];
-            ost2 << (v1[i] > 31 ? v1[i] : '.');
+            ost << hex << (int) v1[i];
+            ost2 << (char) (v1[i] > 31 && v1[i] < 128 ? v1[i] : '.');
             if(i < v1.size() - 1)
                 ost << " ";
         }
-        else
+        else if(i - v1.size() < width)
         {
             ost << "   ";
-            ost2 << '.';
+            ost2 << ' ';
         }
     }
 
-    ost << " : " << ost2.str() << '\n';
+    return res;
+}
 
-    for(i = 0 ; i < max(v1.size(), v2.size()) ; i++)
-    {
-        if(i < v2.size())
-        {
-            ost.width(2);
-            ost.fill('0');
-            ost << (int) v2[i];
-            ost3 << (v2[i] > 31 ? v2[i] : '.');
-            if(i < v2.size() - 1)
-                ost << " ";
-        }
-        else
-        {
-            ost << "   ";
-            ost3 << '.';
-        }
-    }
+string UnitTest::dump(const vector<BYTE> v1)
+{
+    string s;
+    vector<string> as;
 
-    ost << " : " << ost3.str() << endl;
+    as = UnitTest::array_dump(v1);
 
-    return ost.str();
+    for(vector<string>::iterator it = as.begin() ; it != as.end() ; it++)
+        s += *it + "\n";
+
+    return s;
+}
+
+string UnitTest::dump(const string v1)
+{
+    vector<BYTE> ab;
+
+    for(int i = 0 ; i < v1.size() ; i++)
+        ab.push_back(v1[i]);
+
+    return UnitTest::dump(ab);
+}
+
+string UnitTest::dump(const vector<BYTE> v1, const vector<BYTE> v2)
+{
+    string s;
+    vector<string> as1, as2;
+    vector<BYTE> ab1, ab2;
+    vector<string>::iterator it1, it2;
+
+    ab1 = v1;
+    ab2 = v2;
+
+    if(max(v1.size(), v2.size()) == 0)
+        return string("");
+
+    as1 = UnitTest::array_dump(ab1, max(v1.size(), v2.size()));
+    as2 = UnitTest::array_dump(ab2, max(v1.size(), v2.size()));
+
+    for(it1 = as1.begin(), it2 = as2.begin() ; it1 != as1.end() ; it1++, it2++)
+        s += *it1 + " -- " + *it2 + "\n";
+
+    return s;
+}
+
+string UnitTest::dump(const string v1, const string v2)
+{
+    vector<BYTE> ab1, ab2;
+
+    for(int i = 0 ; i < v1.size() ; i++)
+        ab1.push_back(v1[i]);
+
+    for(int i = 0 ; i < v2.size() ; i++)
+        ab2.push_back(v2[i]);
+
+    return UnitTest::dump(ab1, ab2);
 }
 
 AssertError::AssertError(const string s, const string v1, const string v2, const int format)
