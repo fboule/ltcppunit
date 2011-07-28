@@ -26,6 +26,7 @@
 
 #define FMT_DEFAULT 0
 #define FMT_DUMP 1
+#define FMT_MULTILINE 2
 
 class AssertError
 {

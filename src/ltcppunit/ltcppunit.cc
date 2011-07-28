@@ -95,6 +95,9 @@ AssertError::AssertError(const string s, const string v1, const string v2, const
     case FMT_DUMP:
         ost << s << endl << UnitTest::dump(v1, v2);
         break;
+    case FMT_MULTILINE:
+        ost << s << endl << v1 << "---" << endl << v2;
+        break;
     case FMT_DEFAULT:
     default:
         ost << s << " " << v1 << " != " << v2 << endl;
@@ -155,6 +158,11 @@ int UnitTest::assert(const string s, const string v1, const string v2, const int
         {
             cout << "Checking " << s << "... ";
             dmp = UnitTest::dump(v1, v2);
+        }
+        else if(format == FMT_MULTILINE)
+        {
+            cout << "Checking " << s << "... ";
+            dmp = v1 + "---\n" + v2;
         }
         else
             cout << "Checking " << s << " " << v1 << " == " << v2 << "... ";
