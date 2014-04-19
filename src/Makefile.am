@@ -21,6 +21,11 @@
 
 lib_LTLIBRARIES = libltcppunit-1.0.la
 
-libltcppunit_1_0_la_SOURCES = ltcppunit/ltcppunit.cc
+AM_CPPFLAGS = -I$(top_srcdir)/include/
 
-nobase_include_HEADERS = ltcppunit/ltcppunit.h ltcppunit/common.h
+libltcppunit_1_0_la_SOURCES = \
+	ltcppunit.cc
+
+nobase_include_HEADERS = \
+	../include/ltcppunit/ltcppunit.h \
+	../include/ltcppunit/common.h

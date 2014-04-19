@@ -19,13 +19,13 @@
 #
 ################################################################################
 
-AC_INIT([LTCPPUNIT], [1.0], [])
+AC_INIT([ltcppunit], [1.0], [])
 AM_INIT_AUTOMAKE([1.9 tar-pax -Wall -Werror])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 CXXFLAGS=
 
-AM_PROG_AR
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL

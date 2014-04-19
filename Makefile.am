@@ -19,5 +19,7 @@
 ##
 ###################################################################################
 
-SUBDIRS = src 
+EXTRA_DIST = ltcppunit-1.0.spec
+ACLOCAL_AMFLAGS = -I m4
+SUBDIRS = src
 
