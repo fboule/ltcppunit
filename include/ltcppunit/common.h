@@ -17,16 +17,19 @@
 // You should have received a copy of the GNU General Public License
 // along with LTCPPUNIT.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef __COMMON_H
-#define __COMMON_H
+#ifndef __LTCPPUNIT_COMMON_H
+#define __LTCPPUNIT_COMMON_H
 
-#define INT2 short
-#define INT4 long
-#define INT8 long long
+#include <stdint.h>
 
-#define UINT2 unsigned short
-#define UINT4 unsigned long
-#define UINT8 unsigned long long
-#define BYTE unsigned char
+#define INT2 int16_t
+#define INT4 int32_t
+#define INT8 int64_t
+
+#define UINT2 uint16_t
+#define UINT4 uint32_t
+#define UINT8 uint64_t
+
+#define BYTE uint8_t
 
 #endif
